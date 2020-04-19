@@ -53,3 +53,9 @@ const followersArray = [];
   luishrd
   bigknell
 */
+
+console.log(axios.get("https://api.github.com/users/Rezz888"))
+// .then()
+// .catch
+
+// console.log(axios);
