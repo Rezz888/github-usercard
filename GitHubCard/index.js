@@ -7,9 +7,9 @@ const cardsL = document.querySelector('.cards');
 axios.get("https://api.github.com/users/Rezz888")
 
 .then((response)=>{
-  console.log(response);
+  console.log(response.data);
   
-  cardsL.appendChild(componentFunction(response.data))
+  cardsL.appendChild(compFunction(response.data))
 
 })
 .catch((err)=>{
@@ -41,11 +41,11 @@ axios.get("https://api.github.com/users/Rezz888")
 */
 
 const followersArray = [
-  tetondan,
-  dustinmyers,
-  justsml,
-  luishrd,
-  bigknell
+  'tetondan',
+  'dustinmyers',
+  'justsml',
+  'luishrd',
+  'bigknell'
 ];
 
 /* Step 3: Create a function that accepts a single object as its only argument,
@@ -67,64 +67,69 @@ const followersArray = [
 </div>
 
 */
-function componentFunction(dataP){
 
-const cardContainer = document.createElement('div');
-cardContainer.classList.add('card');
+function compFunction(obj){
+  // Creating elements
+  const card = document.createElement('div');
+  const image = document.createElement('img');
+  const cardInfo = document.createElement('div');
+  const name = document.createElement('h3');
+  const userName = document.createElement('p');
+  const location = document.createElement('p');
+  const profile = document.createElement('p');
+  const urlAdd = document.createElement('a');
+  const followers = document.createElement('p');
+  const following = document.createElement('p');
+  const bio = document.createElement('p');
 
-const image = document.createElement('img');
-image.src = dataP.avatar_url;
-cardContainer.appendChild(image);
+  // Cretaing class for styling
+  card.classList.add('card');
+  cardInfo.classList.add('card-info');
+  name.classList.add('name');
+  userName.classList.add('username');
 
-const cardInfo = document.createElement('div');
-cardInfo.classList.add('card-info');
-cardContainer.appendChild(cardInfo);
+  // Programmatically content passing
+  image.src = obj.avatar_url;
+  name.textContent = obj.name;
+  userName.textContent = obj.username;
+  location.textContent = `Location: ${obj.location}`;
+  profile.textContent = "profile: ";
+  urlAdd.href = obj.html_url;
+  urlAdd.textContent = obj.html_url;
+  followers.textContent = `Followers: ${obj.followers}`;
+  following.textContent = `Following: ${obj.following}`;
+  bio.textContent = `Bio: ${obj.bio}`;
 
-let userName = document.createElement('h3');
-userName.classList.add('name');
-userName.textContent = dataP.name;
-cardInfo.appendChild(userName);
+  // Appending
+  card.appendChild(image);
+  card.appendChild(cardInfo);
+  cardInfo.appendChild(name);
+  cardInfo.appendChild(userName);
+  cardInfo.appendChild(location);
+  cardInfo.appendChild(profile);
+  cardInfo.appendChild(urlAdd);
+  cardInfo.appendChild(followers);
+  cardInfo.appendChild(following);
+  cardInfo.appendChild(bio);
+  profile.appendChild(urlAdd);
+  
 
-const p1 = document.createElement('p');
-p1.classList.add('username');
-p1.textContent = dataP.login;
-cardInfo.appendChild(p1);
+return card;
 
-const p2 = document.createElement('p'); 
-p2.textContent = dataP.location;
-cardInfo.appendChild(p2);
-
-const p3 = document.createElement('p');
-p3.textContent = 'Profile: ';
-cardInfo.appendChild(p3);
-
-
-const anchorT = document.createElement('a');
-anchorT.href = dataP.html_url;
-anchorT.textContent = dataP.html_url;
-p3.appendChild(anchorT);
-
-const p4 = document.createElement('p');
-p4.textContent = `Followers: ${dataP.followers}`;
-cardInfo.appendChild(p4);
-
-const p5 = document.createElement('p');
-p5.textContent = `Following: ${dataP.following}`;
-cardInfo.appendChild(p5);
-
-const p6 = document.createElement('p');
-p6.textContent = `Bio: ${dataP.bio}`;
-cardInfo.appendChild(p6);
-
-return cardContainer;
 }
 
 
-/* List of LS Instructors Github username's: 
-  tetondan
-  dustinmyers
-  justsml
-  luishrd
-  bigknell
-*/
+followersArray.forEach((gitHandle) => {
+   axios.get(`https://api.github.com/users/${gitHandle}`)
 
+     .then((response) => {
+        console.log(response.data)
+        cardsL.appendChild(compFunction(response.data))
+     })
+
+     .catch((err) => {
+         console.log(err)
+     })
+
+
+})
